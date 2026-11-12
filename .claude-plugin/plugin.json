@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "bdk-native",
+  "displayName": "BDK Native",
+  "version": "1.0.0",
+  "description": "Turn a live web app into signed iOS and Android apps with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with the customer's approval at every paid or store-facing step.",
+  "author": {
+    "name": "BDK Native",
+    "url": "https://thebdk.com"
+  },
+  "homepage": "https://thebdk.com/agent",
+  "repository": "https://github.com/gauraviitr/bdk-native-plugin",
+  "license": "MIT",
+  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "pwa", "mcp"],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://docs.thebdk.com/reference/ai-agents",
+  "supportUrl": "https://thebdk.com/support",
+  "privacyPolicyUrl": "https://thebdk.com/privacy",
+  "termsOfServiceUrl": "https://thebdk.com/terms"
+}

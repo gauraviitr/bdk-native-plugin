@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "thebdk",
+  "description": "BDK Native plugins: build signed iOS and Android apps from a live web app.",
+  "owner": {
+    "name": "BDK Native",
+    "url": "https://thebdk.com"
+  },
+  "plugins": [
+    {
+      "name": "bdk-native",
+      "source": "./",
+      "description": "Preview, set up, pay for and request iOS and Android builds of a live web app with BDK Native.",
+      "category": "productivity",
+      "tags": ["ios", "android", "mobile", "app-store", "mcp"]
+    }
+  ]
+}

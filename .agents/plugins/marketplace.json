@@ -1,0 +1,20 @@
+{
+  "name": "thebdk",
+  "interface": {
+    "displayName": "BDK Native"
+  },
+  "plugins": [
+    {
+      "name": "bdk-native",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

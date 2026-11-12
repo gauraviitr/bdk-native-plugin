@@ -1,0 +1,54 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bdk-native",
+  "version": "1.0.0",
+  "description": "Create and list phone previews of a web app you have already published, and get steps to open each one in the BDK Preview app on your own phone.",
+  "author": {
+    "name": "BDK Native",
+    "url": "https://thebdk.com"
+  },
+  "homepage": "https://thebdk.com",
+  "license": "MIT",
+  "keywords": [
+    "mobile",
+    "ios",
+    "android",
+    "preview",
+    "web-app"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BDK Native",
+        "shortDescription": "Preview your web app on phone",
+        "longDescription": "Create and list phone previews of a web app you have already published, and get clear steps to open each preview in the BDK Preview app on your own phone. BDK Native turns live web apps into iOS and Android apps.\n\nGive ChatGPT the published address of your web app, not an editor or builder share link. BDK checks the link and creates a preview in your account. If a preview for that address already exists, it is reused. An account can hold up to 20 previews.\n\nTo open a preview, install BDK Preview and sign in with the same BDK account. On iPhone, BDK Preview opens only your own previews. Sign-in codes are never shown in chat.\n\nThis plugin only reads and creates previews in the BDK account you connect. It does not change installed apps, app settings, builds or store listings; those stay in your BDK account at thebdk.com.",
+        "developerName": "Bixby Technologies LLP",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Create phone previews of a published web app",
+          "List the previews in your BDK account",
+          "Explain how to open a preview on your own phone"
+        ],
+        "websiteURL": "https://thebdk.com",
+        "supportURL": "https://thebdk.com/support",
+        "privacyPolicyURL": "https://thebdk.com/privacy",
+        "termsOfServiceURL": "https://thebdk.com/terms",
+        "defaultPrompt": [
+          "Make a phone preview of my web app.",
+          "List my BDK phone previews.",
+          "How do I open my newest preview on my iPhone?"
+        ],
+        "brandColor": "#3499D5",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Initial release: create and list phone previews of a published web app."
+      }
+    }
+  }
+}

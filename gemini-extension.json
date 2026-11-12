@@ -1,0 +1,10 @@
+{
+  "name": "bdk-native",
+  "version": "1.0.0",
+  "description": "Turn a live web app into signed iOS and Android apps with BDK Native: phone preview, project setup, checkout and build requests, with your approval at every paid or store-facing step.",
+  "mcpServers": {
+    "bdk-native": {
+      "httpUrl": "https://mcp.thebdk.com/mcp"
+    }
+  }
+}

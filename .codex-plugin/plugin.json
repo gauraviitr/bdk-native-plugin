@@ -1,0 +1,41 @@
+{
+  "name": "bdk-native",
+  "version": "1.0.0",
+  "description": "Turn a live web app into signed iOS and Android apps with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with the customer's approval at every paid or store-facing step.",
+  "author": {
+    "name": "BDK Native",
+    "url": "https://thebdk.com"
+  },
+  "homepage": "https://thebdk.com/agent",
+  "repository": "https://github.com/gauraviitr/bdk-native-plugin",
+  "license": "MIT",
+  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "BDK Native",
+    "shortDescription": "Web app to iOS and Android",
+    "longDescription": "Turn a web app you already run into signed iOS and Android apps. Preview it on your own phone, create and set up a BDK project, open checkout on Stripe's hosted page, and request builds. Your assistant asks for your approval before every purchase, build request, terms acceptance and change to installed apps. You sign in to your BDK account in your browser; keys and passwords stay on the BDK portal, never in chat. You test and submit the apps from your own Apple and Google accounts.",
+    "developerName": "BDK Native",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Preview your web app on your own phone",
+      "Create and set up a BDK project",
+      "Check what your project needs next",
+      "Open checkout and request builds with your approval",
+      "Download your delivered Android and iOS builds"
+    ],
+    "websiteURL": "https://thebdk.com",
+    "supportURL": "https://thebdk.com/support",
+    "privacyPolicyURL": "https://thebdk.com/privacy",
+    "termsOfServiceURL": "https://thebdk.com/terms",
+    "defaultPrompt": [
+      "Put my web app on my phone as an app preview.",
+      "Where is my BDK project and what is the next step?",
+      "Download my latest Android build."
+    ],
+    "brandColor": "#3499D5",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}

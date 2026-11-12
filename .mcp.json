@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "bdk-native": {
+      "type": "http",
+      "url": "https://mcp.thebdk.com/mcp"
+    }
+  }
+}

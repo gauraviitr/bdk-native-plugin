@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "bdk-native": {
+      "url": "https://mcp.thebdk.com/mcp"
+    }
+  }
+}

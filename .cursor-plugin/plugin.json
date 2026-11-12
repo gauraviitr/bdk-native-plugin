@@ -1,0 +1,13 @@
+{
+  "name": "bdk-native",
+  "description": "Turn a live web app into signed iOS and Android apps with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with the customer's approval at every paid or store-facing step.",
+  "version": "1.0.0",
+  "author": {
+    "name": "BDK Native"
+  },
+  "homepage": "https://thebdk.com/agent",
+  "repository": "https://github.com/gauraviitr/bdk-native-plugin",
+  "license": "MIT",
+  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "mcp"],
+  "logo": "assets/icon.png"
+}
