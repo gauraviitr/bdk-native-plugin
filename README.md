@@ -1,14 +1,14 @@
 # BDK Native plugin
 
-BDK Native (https://thebdk.com) turns a web app you already run into signed iOS and Android apps. This repository connects your AI assistant to BDK's hosted MCP server and adds a skill that tells the assistant how to work with BDK safely. With it, your assistant can put your web app on your phone as a preview, create and set up a BDK project, open checkout for a build, request builds and fetch your delivered builds. It asks for your approval before anything paid or store-facing.
+BDK Native (https://thebdk.com) turns a web app you already run into signed iOS and Android apps for the App Store and Google Play. It works with web apps built with Lovable, Bolt, Replit, Base44, Bubble, v0, Webflow or any other tool or framework: all it needs is a public web address. This repository connects your AI assistant to BDK's hosted MCP server and adds a skill that tells the assistant how to work with BDK safely. With it, your assistant can put your web app on your phone as a preview, create and set up a BDK project, open checkout for a build, request builds and fetch your delivered builds. It asks for your approval before anything paid or store-facing.
 
 You still enrol in the Apple and Google developer programmes yourself, enter your keys on the BDK portal, test the apps and submit them from your own store accounts. Store approval is decided by Apple and Google, not by BDK.
 
 ## Status
 
-- The BDK Native MCP server has been used end to end only in **Claude Code** so far.
-- Installing this plugin from this repository has not been tried on any host yet. The install lines below follow each host's own documentation.
-- Every other host (claude.ai, Codex, Cursor, Gemini CLI, VS Code, ChatGPT) is untested.
+- The BDK Native MCP server (11 tools) has been run end to end in **Claude Code**, in **Claude** on the web (claude.ai) and in **ChatGPT** (13 November 2026).
+- Installing this plugin from this repository has been tried in Claude Code. The install lines for the other hosts follow each host's own documentation and have not been tried.
+- Codex, Cursor, Gemini CLI and VS Code are untested.
 - The ChatGPT version in `chatgpt/` is **not submitted**.
 
 ## What is in it

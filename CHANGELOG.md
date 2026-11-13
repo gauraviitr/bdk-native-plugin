@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 (2026-11-13)
+
+- Descriptions, keywords and the skill's trigger text name the builders BDK is most often used with (Lovable, Bolt, Replit, Base44, Bubble and others). README status brought up to date.
+
 ## 1.0.1 (2026-11-13)
 
 - Follows BDK's agent guide `skill_version` `2026-11-13-tools`: the MCP server has 11 tools and no `bdk_login` (the host signs in through its own flow), and `bdk_check` names the cases for `run: true`.

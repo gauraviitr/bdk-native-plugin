@@ -1,7 +1,7 @@
 {
   "name": "bdk-native",
-  "version": "1.0.1",
-  "description": "Turn a live web app into signed iOS and Android apps with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with the customer's approval at every paid or store-facing step.",
+  "version": "1.0.2",
+  "description": "Turn a live web app built with Lovable, Bolt, Replit, Base44, Bubble or any other tool into signed iOS and Android apps for the App Store and Google Play with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with your approval at every paid or store-facing step.",
   "author": {
     "name": "BDK Native",
     "url": "https://thebdk.com"
@@ -9,7 +9,7 @@
   "homepage": "https://thebdk.com/agent",
   "repository": "https://github.com/gauraviitr/bdk-native-plugin",
   "license": "MIT",
-  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "mcp"],
+  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "mcp", "lovable", "bolt", "replit", "base44", "bubble", "no-code"],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
