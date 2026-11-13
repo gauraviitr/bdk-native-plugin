@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "bdk-native",
   "displayName": "BDK Native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turn a live web app into signed iOS and Android apps with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with the customer's approval at every paid or store-facing step.",
   "author": {
     "name": "BDK Native",

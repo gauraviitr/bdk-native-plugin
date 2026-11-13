@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (2026-11-13)
+
+- Follows BDK's agent guide `skill_version` `2026-11-13-tools`: the MCP server has 11 tools and no `bdk_login` (the host signs in through its own flow), and `bdk_check` names the cases for `run: true`.
+
 ## 1.0.0 (2026-11-12)
 
 - First version, written from BDK's agent guide `skill_version` `2026-11-06-sync`.

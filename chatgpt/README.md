@@ -34,7 +34,7 @@ Run from the repository root. Without `--out` the ZIP goes to the system temp fo
 
 ## Known review risks (recorded, not fixed here)
 
-- The full `/mcp` endpoint keeps its 12 tools in one server; reads and writes are not split into separate tools or servers.
+- The full `/mcp` endpoint keeps its 11 tools in one server; reads and writes are not split into separate tools or servers.
 - The gateway does not check a token's audience (`resource`) or the request `Origin`.
 - `/mcp/preview` is a presentation layer, not a security boundary: a token obtained through it is also accepted on `/mcp` and on the checkout tool.
-- The full server's `instructions` string still tells agents to load BDK's remote agent guide as instructions (Directory Policy 2.F); it needs rewording before any directory submission.
+- Fixed on 13 Nov 2026 (`2026-11-12-channels`): the full server's `instructions` no longer tell agents to load a remote guide as instructions (Directory Policy 2.F).

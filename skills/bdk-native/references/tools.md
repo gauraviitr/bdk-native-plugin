@@ -93,13 +93,13 @@ When a tool call fails in transit, the result holds `error: "upstream_timeout"` 
 ## bdk_check
 
 - Args: `{project_code, run?}`. 200: `{project_code, health_snapshot, health_checked_at, checked_age}`, plus `{ran, scheduled, note}` with `run: true`.
-- After the customer changes credentials or screens on the portal, call with `run: true`. If `scheduled` is true, read again without `run` after a minute and report the relevant check and `health_checked_at`. If false, say the check was not scheduled and use the portal.
+- Call with `run: true` after the customer changes credentials or screens on the portal, when no health snapshot exists yet, or when the customer asks for a new check; otherwise read the last result without `run`. After a `run: true` call, if `scheduled` is true, read again without `run` after a minute and report the relevant check and `health_checked_at`. If false, say the check was not scheduled and use the portal.
 - A `pass` is an observation, never "you're covered".
 - Extra errors: `project_code_required`, `invalid_request`, `project_not_found`, `upstream_error`.
 
-## bdk_login
+## Signing in
 
-- Starts an additional device login only from an already signed-in MCP session; it returns a device code, not a finished connection. For a first or expired sign-in, use the host's reconnect flow.
+- The MCP server has no sign-in tool. Signing in and reconnecting are done by the host (for example `/mcp` in Claude Code), never by asking the customer for a code in chat.
 
 ## Invite tasks
 
