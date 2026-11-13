@@ -11,7 +11,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, rmSync } from "node:fs";
 import { join, resolve, dirname, basename } from "node:path";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
@@ -41,6 +41,8 @@ function assertNotShown(out, ...values) {
   }
 }
 const SKILL = "chatgpt/package/skills/open-a-preview/SKILL.md";
+const CLAUDE_MANIFEST = "plugins/bdk-native/.claude-plugin/plugin.json";
+const CLAUDE_SKILL = "plugins/bdk-native/skills/bdk-native/SKILL.md";
 
 test("a clean copy passes both checks", (t) => {
   const dir = copyRepo(t);
@@ -84,7 +86,7 @@ test("a code in a URL query is not printed by the URL checks", (t) => {
   assertNotShown(zip.out, PAIRING.replace("-", ""), PAIRING);
 
   const dir2 = copyRepo(t);
-  const f = join(dir2, ".mcp.json");
+  const f = join(dir2, "plugins/bdk-native/.mcp.json");
   const j = JSON.parse(readFileSync(f, "utf8"));
   j.mcpServers["bdk-native"].url = `https://mcp.thebdk.com/mcp?pair=${PAIRING}`;
   writeFileSync(f, JSON.stringify(j));
@@ -162,12 +164,73 @@ test("a paragraph break in a JSON string does not hide a banned word or a code",
   assertNotShown(zip.out, PAIRING.replace("-", ""), PAIRING);
 
   const dir2 = copyRepo(t);
-  const g = join(dir2, ".claude-plugin/plugin.json");
+  const g = join(dir2, CLAUDE_MANIFEST);
   const k = JSON.parse(readFileSync(g, "utf8"));
   k.description += `\n${PAIRING}`;
   writeFileSync(g, JSON.stringify(k, null, 2));
   const repo = run(dir2, "check-repo.mjs");
   assert.equal(repo.code, 1);
-  assert.match(repo.out, /\.claude-plugin\/plugin\.json at \.description, line:\d+: contains something shaped like a pairing code \(text not shown\)/);
+  assert.match(repo.out, /plugins\/bdk-native\/\.claude-plugin\/plugin\.json at \.description, line:\d+: contains something shaped like a pairing code \(text not shown\)/);
   assertNotShown(repo.out, PAIRING);
+});
+
+// The Claude plugin folder is what Anthropic's plugin directory scans. These
+// cases keep the causes of its policy holds and warnings out of that folder.
+
+test("a script, an image or an image reference in the Claude plugin folder fails", (t) => {
+  for (const [rel, body, want] of [
+    ["plugins/bdk-native/scripts/tool.mjs", "export {};\n", /plugins\/bdk-native\/scripts\/tool\.mjs: not allowed in the Claude plugin folder/],
+    ["plugins/bdk-native/logo.png", "", /plugins\/bdk-native\/logo\.png: not allowed in the Claude plugin folder/],
+  ]) {
+    const dir = copyRepo(t);
+    mkdirSync(dirname(join(dir, rel)), { recursive: true });
+    writeFileSync(join(dir, rel), body);
+    const repo = run(dir, "check-repo.mjs");
+    assert.equal(repo.code, 1);
+    assert.match(repo.out, want);
+  }
+  const dir = copyRepo(t);
+  appendFileSync(join(dir, "plugins/bdk-native/README.md"), "\nSee assets/icon.png.\n");
+  const repo = run(dir, "check-repo.mjs");
+  assert.equal(repo.code, 1);
+  assert.match(repo.out, /plugins\/bdk-native\/README\.md:\d+: names an image or font file/);
+});
+
+test("the Claude manifest keeps to the fields the plugin spec knows, without icon or link fields", (t) => {
+  const dir = copyRepo(t);
+  const f = join(dir, CLAUDE_MANIFEST);
+  const j = JSON.parse(readFileSync(f, "utf8"));
+  j.supportUrl = "https://thebdk.com/support";
+  writeFileSync(f, JSON.stringify(j, null, 2));
+  const repo = run(dir, "check-repo.mjs");
+  assert.equal(repo.code, 1);
+  assert.match(repo.out, /plugin\.json: field "supportUrl" is not allowed/);
+});
+
+test("a second copy of the skill at the repo root fails", (t) => {
+  const dir = copyRepo(t);
+  cpSync(join(dir, "plugins/bdk-native/skills"), join(dir, "skills"), { recursive: true });
+  const repo = run(dir, "check-repo.mjs");
+  assert.equal(repo.code, 1);
+  assert.match(repo.out, /one canonical skill/);
+});
+
+test("an unquoted skill description fails", (t) => {
+  const dir = copyRepo(t);
+  const f = join(dir, CLAUDE_SKILL);
+  writeFileSync(f, readFileSync(f, "utf8").replace(/^description: "(.*)"$/m, (_m, d) => `description: ${d}`));
+  const repo = run(dir, "check-repo.mjs");
+  assert.equal(repo.code, 1);
+  assert.match(repo.out, /description must be a double-quoted string/);
+});
+
+test("a host path that no longer points at the skill fails", (t) => {
+  const dir = copyRepo(t);
+  const f = join(dir, "gemini-extension.json");
+  const j = JSON.parse(readFileSync(f, "utf8"));
+  j.contextFileName = "skills/bdk-native/SKILL.md";
+  writeFileSync(f, JSON.stringify(j, null, 2));
+  const repo = run(dir, "check-repo.mjs");
+  assert.equal(repo.code, 1);
+  assert.match(repo.out, /gemini-extension\.json: contextFileName must be/);
 });

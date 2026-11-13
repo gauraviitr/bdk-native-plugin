@@ -88,7 +88,7 @@ codex mcp login bdk-native
 gemini extensions install https://github.com/gauraviitr/bdk-native-plugin
 ```
 
-Then, inside Gemini CLI, run `/mcp auth bdk-native` to sign in. The extension adds the server and the `bdk-native` skill.
+Then, inside Gemini CLI, run `/mcp auth bdk-native` to sign in. The extension adds the server and loads the `bdk-native` skill's main file as always-on context (Gemini CLI looks for skills only in a `skills/` folder at the repository root, and the skill now lives in `plugins/bdk-native/`). Its `references/` files are not loaded by themselves.
 
 ### Cursor
 
@@ -112,12 +112,13 @@ Use the server URL `https://mcp.thebdk.com/mcp` with Streamable HTTP and OAuth s
 
 | Path | Read by |
 |---|---|
-| `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.mcp.json` | Claude Code, claude.ai, Claude desktop |
-| `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`, `.mcp.json` | Codex |
-| `.cursor-plugin/plugin.json`, `rules/bdk-native.mdc`, `mcp.json` | Cursor |
-| `gemini-extension.json` | Gemini CLI |
-| `skills/bdk-native/` | the shared skill (Claude, Codex, Cursor, Gemini CLI) |
-| `assets/icon.png` | listing icon |
+| `.claude-plugin/marketplace.json` | Claude Code, claude.ai, Claude desktop: the marketplace; its one plugin is `plugins/bdk-native` |
+| `plugins/bdk-native/` | the Claude plugin, and the plugin path for Anthropic's plugin directory: `.claude-plugin/plugin.json`, `.claude-plugin/icon.png` (listing icon, a copy of `assets/icon.png`), `.mcp.json`, the skill, `README.md`, `LICENSE`. Nothing else goes in this folder (`check-repo.mjs` enforces it) |
+| `plugins/bdk-native/skills/bdk-native/` | the one shared skill (Claude, Codex, Cursor; Gemini CLI reads its `SKILL.md` as context) |
+| `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json` | Codex (skill and MCP config from `plugins/bdk-native/`) |
+| `.cursor-plugin/plugin.json`, `rules/bdk-native.mdc`, `mcp.json` | Cursor (skill from `plugins/bdk-native/`) |
+| `gemini-extension.json` | Gemini CLI (`contextFileName` points at the skill's `SKILL.md`) |
+| `assets/icon.png` | icon for Codex and Cursor |
 | `chatgpt/` | source of the ChatGPT plugin ZIP, preview-only, **not submitted** |
 | `scripts/` | maintainer checks; no host loads them |
 
@@ -133,7 +134,8 @@ node scripts/check-skill-sync.mjs            # skill stamp vs the live canonical
 node scripts/check-skill-sync.mjs ../bdk-native-web/apps/portal/public/agent/skill.md   # or a local copy
 node scripts/build-chatgpt-zip.mjs --check   # ChatGPT ZIP hard rules, writes nothing
 node --test scripts/test-checks.mjs          # tests for the two checks above
-claude plugin validate . --strict --profile directory
+claude plugin validate plugins/bdk-native --strict --profile directory   # the plugin the directory scans
+claude plugin validate . --strict                                        # the marketplace
 gemini extensions validate .
 ```
 
@@ -141,11 +143,11 @@ gemini extensions validate .
 
 Do this whenever the canonical guide's `skill_version` changes (`check-skill-sync.mjs` fails until it is done), and for any other change to the plugin:
 
-1. Re-read the canonical guide and update `skills/bdk-native/SKILL.md` and its `references/` in their own words. Keep the rules self-contained: no instructions to load remote rules, no prices, no codes, no secrets.
+1. Re-read the canonical guide and update `plugins/bdk-native/skills/bdk-native/SKILL.md` and its `references/` in their own words. Keep the rules self-contained: no instructions to load remote rules, no prices, no codes, no secrets.
 2. Set the new value in both stamps in `SKILL.md`: `metadata.skill_version` in the frontmatter and the `Guide version:` line in the body.
-3. Raise `version` together in `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json` and `gemini-extension.json`. Add a `CHANGELOG.md` entry.
+3. Raise `version` together in `plugins/bdk-native/.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json` and `gemini-extension.json`. Add a `CHANGELOG.md` entry.
 4. Run every check above; all must pass.
-5. Commit, then tag with `claude plugin tag` (it checks that the manifest and marketplace entry agree).
+5. Commit, then tag with `claude plugin tag plugins/bdk-native` (it checks that the manifest and marketplace entry agree).
 
 The ChatGPT package in `chatgpt/` has its own version and review cycle; see `chatgpt/README.md`.
 

@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "bdk-native",
   "displayName": "BDK Native",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Turn a live web app built with Lovable, Bolt, Replit, Base44, Bubble or any other tool into signed iOS and Android apps for the App Store and Google Play with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with your approval at every paid or store-facing step.",
   "author": {
     "name": "BDK Native",
@@ -11,10 +11,5 @@
   "homepage": "https://thebdk.com/agent",
   "repository": "https://github.com/gauraviitr/bdk-native-plugin",
   "license": "MIT",
-  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "pwa", "mcp", "lovable", "bolt", "replit", "base44", "bubble", "no-code"],
-  "icon": "./assets/icon.png",
-  "documentationUrl": "https://docs.thebdk.com/reference/ai-agents",
-  "supportUrl": "https://thebdk.com/support",
-  "privacyPolicyUrl": "https://thebdk.com/privacy",
-  "termsOfServiceUrl": "https://thebdk.com/terms"
+  "keywords": ["ios", "android", "mobile-app", "app-store", "google-play", "web-to-app", "pwa", "mcp", "lovable", "bolt", "replit", "base44", "bubble", "no-code"]
 }

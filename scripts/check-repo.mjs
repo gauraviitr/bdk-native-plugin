@@ -4,10 +4,14 @@
 //   node scripts/check-repo.mjs
 //
 // Checks: every JSON file parses; the four host manifests share one name and
-// version; every full-plugin MCP config points at the same URL; the skill
-// frontmatter matches its folder and stays within the documented size
-// guidance; no price, secret, personal email, code-shaped string or
-// fetch-and-follow instruction anywhere in the tree.
+// version; every full-plugin MCP config points at the same URL; every host
+// finds the one canonical skill in plugins/bdk-native/skills/; the Claude
+// plugin folder holds only what a Claude plugin needs (no scripts, no images,
+// nothing that names an image or font file, no manifest fields outside the
+// plugin spec), because that folder is what Anthropic's plugin directory
+// scans; the skill frontmatter matches its folder, quotes its description and
+// stays within the documented size guidance; no price, secret, personal email,
+// code-shaped string or fetch-and-follow instruction anywhere in the tree.
 // Failure messages name the file, line and kind of problem only; they never
 // print the matched text, so a planted code or secret never reaches a log.
 // Exit codes: 0 pass, 1 a check failed. Built-in Node modules only;
@@ -19,6 +23,14 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MCP_URL = "https://mcp.thebdk.com/mcp";
+// The Claude plugin lives in its own folder; the marketplace at the repo root
+// points at it, and the Codex, Cursor and Gemini manifests reach into it for
+// the skill. This folder is the plugin path given to Anthropic's directory.
+const CLAUDE_DIR = "plugins/bdk-native";
+const CLAUDE_MANIFEST = `${CLAUDE_DIR}/.claude-plugin/plugin.json`;
+const CLAUDE_MCP = `${CLAUDE_DIR}/.mcp.json`;
+const SKILLS_DIR = `${CLAUDE_DIR}/skills`;
+const SKILL_FILE = `${SKILLS_DIR}/bdk-native/SKILL.md`;
 const errors = [];
 const err = (m) => errors.push(m);
 
@@ -73,7 +85,7 @@ for (const r of files.filter((x) => x.endsWith(".json"))) {
 }
 
 // 2. Host manifests agree.
-const MANIFESTS = [".claude-plugin/plugin.json", ".codex-plugin/plugin.json", ".cursor-plugin/plugin.json", "gemini-extension.json"];
+const MANIFESTS = [CLAUDE_MANIFEST, ".codex-plugin/plugin.json", ".cursor-plugin/plugin.json", "gemini-extension.json"];
 const versions = new Set();
 for (const m of MANIFESTS) {
   const j = json[m];
@@ -86,35 +98,70 @@ if (versions.size > 1) err(`host manifest versions differ: ${[...versions].map((
 const cm = json[".claude-plugin/marketplace.json"];
 const xm = json[".agents/plugins/marketplace.json"];
 if (cm?.name !== "thebdk" || xm?.name !== "thebdk") err('both marketplaces must be named "thebdk"');
-if (cm?.plugins?.[0]?.source !== "./") err('.claude-plugin/marketplace.json: source must be "./"');
+if (cm?.plugins?.[0]?.source !== `./${CLAUDE_DIR}`) err(`.claude-plugin/marketplace.json: source must be "./${CLAUDE_DIR}"`);
 if (cm?.plugins?.[0]?.version !== undefined) err(".claude-plugin/marketplace.json: leave version to plugin.json");
 const xe = xm?.plugins?.[0];
 if (xe?.source?.path !== "./" || !xe?.policy?.installation || !xe?.policy?.authentication || !xe?.category) err(".agents/plugins/marketplace.json: entry needs source.path ./, policy.installation, policy.authentication and category");
-if (json[".codex-plugin/plugin.json"]?.mcpServers !== "./.mcp.json" || json[".codex-plugin/plugin.json"]?.skills !== "./skills/") err(".codex-plugin/plugin.json: skills and mcpServers paths");
+if (json[".codex-plugin/plugin.json"]?.mcpServers !== `./${CLAUDE_MCP}` || json[".codex-plugin/plugin.json"]?.skills !== `./${SKILLS_DIR}/`) err(`.codex-plugin/plugin.json: skills must be "./${SKILLS_DIR}/" and mcpServers "./${CLAUDE_MCP}"`);
+if (json[".cursor-plugin/plugin.json"]?.skills !== `./${SKILLS_DIR}/`) err(`.cursor-plugin/plugin.json: skills must be "./${SKILLS_DIR}/"`);
+if (json["gemini-extension.json"]?.contextFileName !== SKILL_FILE) err(`gemini-extension.json: contextFileName must be "${SKILL_FILE}" (Gemini CLI reads skills only from its root skills/ folder)`);
 if (files.includes("plugin.json")) err("no root plugin.json: OpenAI would read it as a portable package and ignore .codex-plugin/plugin.json");
+
+// 2b. The Claude plugin folder: the only Claude plugin, and only what it needs.
+if (files.includes(".claude-plugin/plugin.json")) err(".claude-plugin/plugin.json: the Claude manifest lives in plugins/bdk-native/; the repo root holds only the marketplace");
+if (files.includes(".mcp.json")) err(".mcp.json: the Claude MCP config lives in plugins/bdk-native/ (one copy)");
+const skillCopies = files.filter((x) => /(^|\/)SKILL\.md$/.test(x) && !x.startsWith("chatgpt/"));
+if (skillCopies.length !== 1 || skillCopies[0] !== SKILL_FILE) err(`one canonical skill expected at ${SKILL_FILE} (found ${skillCopies.length} SKILL.md files outside chatgpt/)`);
+// .claude-plugin/icon.png is the listing icon. The directory finds it at that
+// path by itself, so no file names it (naming an image is what raised its holds).
+const CLAUDE_ICON = ".claude-plugin/icon.png";
+const CLAUDE_FILES = [/^\.claude-plugin\/plugin\.json$/, /^\.claude-plugin\/icon\.png$/, /^\.mcp\.json$/, /^README\.md$/, /^LICENSE$/, /^skills\/[a-z0-9-]+\/(SKILL\.md|references\/[a-z0-9-]+\.md)$/];
+const claudeFiles = files.filter((x) => x.startsWith(`${CLAUDE_DIR}/`)).map((x) => x.slice(CLAUDE_DIR.length + 1));
+for (const r of claudeFiles) if (!CLAUDE_FILES.some((re) => re.test(r))) err(`${CLAUDE_DIR}/${r}: not allowed in the Claude plugin folder (only .claude-plugin/plugin.json, .claude-plugin/icon.png, .mcp.json, README.md, LICENSE and skills/*/ Markdown)`);
+const MEDIA_NAME = /\.(png|jpe?g|gif|svg|webp|ico|icns|bmp|tiff?|avif|heic|ttf|otf|woff2?|eot)\b/i;
+for (const r of claudeFiles.filter((x) => x !== CLAUDE_ICON && CLAUDE_FILES.some((re) => re.test(x)))) {
+  const t = text(`${CLAUDE_DIR}/${r}`);
+  const m = t.match(MEDIA_NAME);
+  if (m) err(`${CLAUDE_DIR}/${r}:${lineOf(t, m.index)}: names an image or font file (the plugin directory holds a plugin that does)`);
+}
+if (files.includes(`${CLAUDE_DIR}/LICENSE`) && files.includes("LICENSE") && text(`${CLAUDE_DIR}/LICENSE`) !== text("LICENSE")) err(`${CLAUDE_DIR}/LICENSE must be the same as LICENSE`);
+if (files.includes(`${CLAUDE_DIR}/${CLAUDE_ICON}`) && !readFileSync(join(root, CLAUDE_DIR, CLAUDE_ICON)).equals(readFileSync(join(root, "assets", "icon.png")))) err(`${CLAUDE_DIR}/${CLAUDE_ICON} must be the same file as the shared icon in assets/`);
+// The icon is optional: deleting it (if the directory ever holds it) must not fail this check.
+for (const r of ["README.md", "LICENSE"]) if (!files.includes(`${CLAUDE_DIR}/${r}`)) err(`missing ${CLAUDE_DIR}/${r}`);
+// Fields the Claude Code plugin manifest spec knows, minus the directory
+// listing fields (icon, documentationUrl, supportUrl, privacyPolicyUrl,
+// termsOfServiceUrl) that the directory's checker reported as warnings.
+const CLAUDE_FIELDS = ["$schema", "name", "displayName", "version", "description", "author", "homepage", "repository", "license", "keywords"];
+for (const k of Object.keys(json[CLAUDE_MANIFEST] ?? {})) if (!CLAUDE_FIELDS.includes(k)) err(`${CLAUDE_MANIFEST}: field "${/^[A-Za-z$][\w$]{0,40}$/.test(k) ? k : "(not shown)"}" is not allowed (keep to ${CLAUDE_FIELDS.join(", ")})`);
 
 // 3. One MCP URL for the full plugin (the ChatGPT package has its own, checked by build-chatgpt-zip.mjs).
 const urlOf = {
-  ".mcp.json": json[".mcp.json"]?.mcpServers?.["bdk-native"]?.url,
+  [CLAUDE_MCP]: json[CLAUDE_MCP]?.mcpServers?.["bdk-native"]?.url,
   "mcp.json": json["mcp.json"]?.mcpServers?.["bdk-native"]?.url,
   "gemini-extension.json": json["gemini-extension.json"]?.mcpServers?.["bdk-native"]?.httpUrl,
 };
 for (const [f, u] of Object.entries(urlOf)) if (u !== MCP_URL) err(`${f}: bdk-native server must be ${MCP_URL} (found ${safeUrl(u)})`);
-if (json[".mcp.json"]?.mcpServers?.["bdk-native"]?.type !== "http") err('.mcp.json: type must be "http"');
-for (const f of [".mcp.json", "mcp.json"]) {
+if (json[CLAUDE_MCP]?.mcpServers?.["bdk-native"]?.type !== "http") err(`${CLAUDE_MCP}: type must be "http"`);
+for (const f of [CLAUDE_MCP, "mcp.json"]) {
   const servers = Object.values(json[f]?.mcpServers ?? {});
   if (servers.length !== 1) err(`${f}: exactly one server expected`);
   for (const s of servers) if (s.headers || s.env) err(`${f}: no headers or env (OAuth is discovered from the server)`);
 }
 
 // 4. Skill shape.
-for (const r of files.filter((x) => /^skills\/[^/]+\/SKILL\.md$/.test(x))) {
+const skillFiles = files.filter((x) => x.startsWith(`${SKILLS_DIR}/`) && /^[^/]+\/SKILL\.md$/.test(x.slice(SKILLS_DIR.length + 1)));
+if (skillFiles.length === 0) err(`no skill found under ${SKILLS_DIR}/`);
+for (const r of skillFiles) {
   const t = text(r);
   const fm = t.match(/^---\n([\s\S]*?)\n---\n/);
   if (!fm) { err(`${r}: no frontmatter`); continue; }
-  const folder = r.split("/")[1];
+  const folder = r.slice(SKILLS_DIR.length + 1).split("/")[0];
   if (fm[1].match(/^name:\s*(.+)$/m)?.[1].trim() !== folder) err(`${r}: name must equal folder "${folder}"`);
-  const desc = fm[1].match(/^description:\s*(.+)$/m)?.[1].trim() ?? "";
+  const rawDesc = fm[1].match(/^description:\s*(.+)$/m)?.[1].trim() ?? "";
+  // Quoted, so no YAML reader can take a colon or a hash in it for structure.
+  const quoted = rawDesc.match(/^"([^"\\]*)"$/);
+  if (!quoted) err(`${r}: description must be a double-quoted string with no quote or backslash inside`);
+  const desc = quoted ? quoted[1] : rawDesc;
   if (!desc || desc.length > 1024) err(`${r}: description must be 1-1024 characters (is ${desc.length})`);
   if (/[<>]/.test(desc)) err(`${r}: no angle brackets in description`);
   for (const k of fm[1].split("\n").map((l) => l.match(/^([A-Za-z_-]+):/)?.[1]).filter(Boolean)) {
@@ -122,7 +169,7 @@ for (const r of files.filter((x) => /^skills\/[^/]+\/SKILL\.md$/.test(x))) {
   }
   const bodyLines = t.slice(fm[0].length).split("\n").length;
   if (bodyLines >= 500) err(`${r}: body is ${bodyLines} lines (keep under 500; move detail to references/)`);
-  for (const link of t.matchAll(/\]\((references\/[^)]+)\)/g)) if (!files.includes(`skills/${folder}/${link[1]}`)) err(`${r}: broken link ${link[1]}`);
+  for (const link of t.matchAll(/\]\((references\/[^)]+)\)/g)) if (!files.includes(`${SKILLS_DIR}/${folder}/${link[1]}`)) err(`${r}: broken link ${link[1]}`);
 }
 
 // 5. Content scans over every text file (patterns are assembled so this file does not match itself).

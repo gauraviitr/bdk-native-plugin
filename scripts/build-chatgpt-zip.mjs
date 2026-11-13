@@ -116,8 +116,8 @@ const plugin = readJson("plugin.json") ?? {};
 const mcp = readJson("mcp.json") ?? {};
 
 // Agent Plugins plugin.schema.json 1.0.0 (additionalProperties: false).
-const PLUGIN_KEYS = ["$schema", "name", "version", "description", "author", "homepage", "repository", "license", "keywords", "extensions"];
-for (const k of Object.keys(plugin)) if (!PLUGIN_KEYS.includes(k)) err(`plugin.json: unknown top-level key "${k}" (schema allows ${PLUGIN_KEYS.join(", ")})`);
+const MANIFEST_FIELDS = ["$schema", "name", "version", "description", "author", "homepage", "repository", "license", "keywords", "extensions"];
+for (const k of Object.keys(plugin)) if (!MANIFEST_FIELDS.includes(k)) err(`plugin.json: unknown top-level key "${k}" (schema allows ${MANIFEST_FIELDS.join(", ")})`);
 if (plugin.$schema !== PLUGIN_SCHEMA) err(`plugin.json: $schema must be ${PLUGIN_SCHEMA}`);
 if (typeof plugin.name !== "string" || plugin.name.length > 64 || !/^(?!.*(?:--|\.\.))[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/.test(plugin.name)) err("plugin.json: name must be 1-64 lowercase letters, digits, single hyphens or dots");
 if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(plugin.version ?? "")) err("plugin.json: version must be an explicit semantic version");

@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "bdk-native",
-      "source": "./",
+      "source": "./plugins/bdk-native",
       "description": "Preview, set up, pay for and request iOS and Android builds of a live web app with BDK Native.",
       "category": "productivity",
       "tags": ["ios", "android", "mobile", "app-store", "mcp"]

@@ -1,6 +1,6 @@
 ---
 name: bdk-native
-description: Use when the user wants real iOS or Android apps from a web app they already run, wants their site in the App Store or Google Play, wants to wrap or convert a website or web app into a mobile app (including one made with Lovable, Bolt, Replit, Base44, Bubble, v0, Webflow, Softr, Framer or a similar builder), wants to try their web app on a phone, or asks about BDK Native or thebdk.com. Also use when adding @thebdk/native SDK features (push, deep links, in-app purchases, biometrics) to a web app. Drives the BDK Native connector tools (bdk_whoami, bdk_next, bdk_setup_preview, bdk_create_project, bdk_configure, bdk_estimate, bdk_checkout, bdk_build). Not for building React Native, Flutter or Swift apps from scratch.
+description: "Use when the user wants real iOS or Android apps from a web app they already run, wants their site in the App Store or Google Play, wants to wrap or convert a website or web app into a mobile app (including one made with Lovable, Bolt, Replit, Base44, Bubble, v0, Webflow, Softr, Framer or a similar builder), wants to try their web app on a phone, or asks about BDK Native or thebdk.com. Also use when adding @thebdk/native SDK features (push, deep links, in-app purchases, biometrics) to a web app. Drives the BDK Native connector tools (bdk_whoami, bdk_next, bdk_setup_preview, bdk_create_project, bdk_configure, bdk_estimate, bdk_checkout, bdk_build). Not for building React Native, Flutter or Swift apps from scratch."
 license: MIT
 metadata:
   skill_version: 2026-11-13-tools

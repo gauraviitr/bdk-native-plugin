@@ -24,7 +24,7 @@ function fail(code, message) {
 
 const args = process.argv.slice(2);
 let canonical = DEFAULT_CANONICAL;
-let skillPath = resolve(repoRoot, "skills/bdk-native/SKILL.md");
+let skillPath = resolve(repoRoot, "plugins/bdk-native/skills/bdk-native/SKILL.md");
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--skill") skillPath = resolve(args[++i] ?? "");
   else if (args[i] === "-h" || args[i] === "--help") {

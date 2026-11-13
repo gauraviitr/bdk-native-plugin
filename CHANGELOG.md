@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.3 (2026-11-13)
+
+- The Claude plugin moved to its own folder, `plugins/bdk-native/`, holding only its manifest, listing icon, MCP config, the skill, a README and the licence. `.claude-plugin/marketplace.json` at the root points at it, so `claude plugin install bdk-native --marketplace gauraviitr/bdk-native-plugin` works as before. This is the plugin path for Anthropic's plugin directory.
+- The skill has one copy, at `plugins/bdk-native/skills/bdk-native/`. Codex and Cursor point their `skills` at it; Codex reads the MCP config from the same folder; Gemini CLI loads the skill's `SKILL.md` through `contextFileName`, because it reads skills only from a root `skills/` folder.
+- The Claude manifest keeps to the fields Claude Code's plugin spec knows: no `icon` field and no listing link fields. The icon sits at `.claude-plugin/icon.png`, where the directory finds it by itself; links to privacy, terms, support and docs are in the plugin README.
+- The skill's `description` is quoted. The skill text is otherwise unchanged.
+- `scripts/build-chatgpt-zip.mjs`: a list of manifest field names was renamed to `MANIFEST_FIELDS`. The ChatGPT package itself is unchanged and keeps its own version.
+- `scripts/check-repo.mjs` checks the new layout: one skill copy, every host pointing at it, and nothing in the Claude plugin folder beyond what a Claude plugin needs (no scripts, no other images, no file naming an image or font). New cases in `scripts/test-checks.mjs`.
+
 ## 1.0.2 (2026-11-13)
 
 - Descriptions, keywords and the skill's trigger text name the builders BDK is most often used with (Lovable, Bolt, Replit, Base44, Bubble and others). README status brought up to date.
