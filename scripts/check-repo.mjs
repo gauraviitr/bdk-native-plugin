@@ -128,10 +128,12 @@ if (files.includes(`${CLAUDE_DIR}/LICENSE`) && files.includes("LICENSE") && text
 if (files.includes(`${CLAUDE_DIR}/${CLAUDE_ICON}`) && !readFileSync(join(root, CLAUDE_DIR, CLAUDE_ICON)).equals(readFileSync(join(root, "assets", "icon.png")))) err(`${CLAUDE_DIR}/${CLAUDE_ICON} must be the same file as the shared icon in assets/`);
 // The icon is optional: deleting it (if the directory ever holds it) must not fail this check.
 for (const r of ["README.md", "LICENSE"]) if (!files.includes(`${CLAUDE_DIR}/${r}`)) err(`missing ${CLAUDE_DIR}/${r}`);
-// Fields the Claude Code plugin manifest spec knows, minus the directory
-// listing fields (icon, documentationUrl, supportUrl, privacyPolicyUrl,
-// termsOfServiceUrl) that the directory's checker reported as warnings.
-const CLAUDE_FIELDS = ["$schema", "name", "displayName", "version", "description", "author", "homepage", "repository", "license", "keywords"];
+// Fields the Claude Code plugin manifest spec knows, plus the four listing
+// link fields the directory reads (without them it guesses the links from the
+// README and picked the pricing file as "Documentation", 13 Nov 2026). No
+// "icon" field: the directory finds .claude-plugin/icon.png by itself and
+// reported the field as another tool's.
+const CLAUDE_FIELDS = ["$schema", "name", "displayName", "version", "description", "author", "homepage", "repository", "license", "keywords", "documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"];
 for (const k of Object.keys(json[CLAUDE_MANIFEST] ?? {})) if (!CLAUDE_FIELDS.includes(k)) err(`${CLAUDE_MANIFEST}: field "${/^[A-Za-z$][\w$]{0,40}$/.test(k) ? k : "(not shown)"}" is not allowed (keep to ${CLAUDE_FIELDS.join(", ")})`);
 
 // 3. One MCP URL for the full plugin (the ChatGPT package has its own, checked by build-chatgpt-zip.mjs).

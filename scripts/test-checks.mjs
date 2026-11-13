@@ -196,15 +196,15 @@ test("a script, an image or an image reference in the Claude plugin folder fails
   assert.match(repo.out, /plugins\/bdk-native\/README\.md:\d+: names an image or font file/);
 });
 
-test("the Claude manifest keeps to the fields the plugin spec knows, without icon or link fields", (t) => {
+test("the Claude manifest keeps to the fields the plugin spec and the directory know, without an icon field", (t) => {
   const dir = copyRepo(t);
   const f = join(dir, CLAUDE_MANIFEST);
   const j = JSON.parse(readFileSync(f, "utf8"));
-  j.supportUrl = "https://thebdk.com/support";
+  j.icon = "./icon";
   writeFileSync(f, JSON.stringify(j, null, 2));
   const repo = run(dir, "check-repo.mjs");
   assert.equal(repo.code, 1);
-  assert.match(repo.out, /plugin\.json: field "supportUrl" is not allowed/);
+  assert.match(repo.out, /plugin\.json: field "icon" is not allowed/);
 });
 
 test("a second copy of the skill at the repo root fails", (t) => {

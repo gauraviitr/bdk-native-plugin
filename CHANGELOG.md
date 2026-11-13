@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4 (2026-11-13)
+
+- The Claude manifest states its four listing links (`documentationUrl`, `supportUrl`, `privacyPolicyUrl`, `termsOfServiceUrl`). Without them the plugin directory took the links from the README and showed the pricing file as "Documentation".
+
 ## 1.0.3 (2026-11-13)
 
 - The Claude plugin moved to its own folder, `plugins/bdk-native/`, holding only its manifest, listing icon, MCP config, the skill, a README and the licence. `.claude-plugin/marketplace.json` at the root points at it, so `claude plugin install bdk-native --marketplace gauraviitr/bdk-native-plugin` works as before. This is the plugin path for Anthropic's plugin directory.
