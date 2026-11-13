@@ -1,7 +1,7 @@
 {
   "name": "bdk-native",
   "description": "Turn a live web app built with Lovable, Bolt, Replit, Base44, Bubble or any other tool into signed iOS and Android apps for the App Store and Google Play with BDK Native: a phone preview first, then project setup, checkout and build requests through BDK's hosted MCP server, with your approval at every paid or store-facing step.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": {
     "name": "BDK Native"
   },

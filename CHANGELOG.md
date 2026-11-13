@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5 (2026-11-13)
+
+- Follows BDK's agent guide `skill_version` `2026-11-13-wording`. That guide version changed no tool, rule or guidance (only the one-line description on the MCP Registry and the server card), so the skill text is unchanged apart from its two version stamps.
+
 ## 1.0.4 (2026-11-13)
 
 - The Claude manifest states its four listing links (`documentationUrl`, `supportUrl`, `privacyPolicyUrl`, `termsOfServiceUrl`). Without them the plugin directory took the links from the README and showed the pricing file as "Documentation".

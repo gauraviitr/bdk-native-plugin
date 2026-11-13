@@ -3,12 +3,12 @@ name: bdk-native
 description: "Use when the user wants real iOS or Android apps from a web app they already run, wants their site in the App Store or Google Play, wants to wrap or convert a website or web app into a mobile app (including one made with Lovable, Bolt, Replit, Base44, Bubble, v0, Webflow, Softr, Framer or a similar builder), wants to try their web app on a phone, or asks about BDK Native or thebdk.com. Also use when adding @thebdk/native SDK features (push, deep links, in-app purchases, biometrics) to a web app. Drives the BDK Native connector tools (bdk_whoami, bdk_next, bdk_setup_preview, bdk_create_project, bdk_configure, bdk_estimate, bdk_checkout, bdk_build). Not for building React Native, Flutter or Swift apps from scratch."
 license: MIT
 metadata:
-  skill_version: 2026-11-13-tools
+  skill_version: 2026-11-13-wording
 ---
 
 # BDK Native
 
-Guide version: `2026-11-13-tools` (the BDK agent guide this skill was written from).
+Guide version: `2026-11-13-wording` (the BDK agent guide this skill was written from).
 
 BDK Native (https://thebdk.com) builds and signs iOS and Android apps from the customer's live web app. The app loads the live site, so web changes show up without a new build; store rules still apply. The customer enrols in Apple Developer and Google Play, enters keys on the BDK portal, pays on Stripe's hosted page, tests, and submits from their own store accounts. BDK builds and signs. BDK is a build service with a portal, not a design agency.
 
