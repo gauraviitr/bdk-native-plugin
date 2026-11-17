@@ -1,11 +1,11 @@
-# ChatGPT plugin source: NOT SUBMITTED
+# ChatGPT plugin: earlier draft of the package
 
-> **Status: not submitted.** Nothing in this folder has been uploaded to platform.openai.com, connected in ChatGPT, or reviewed by OpenAI. It is the prepared source for a future upload.
+> **Status on 17 November 2026: BDK Native for ChatGPT and Codex is submitted to OpenAI and in review. It is not published yet.** The submitted package was built from a newer source that BDK keeps outside this repository. This folder is the earlier draft of that package, kept for its build checks. It is not what was uploaded: do not upload it.
 
-`package/` is the plugin ZIP source in the portable Agent Plugins layout:
+`package/` is the draft plugin ZIP source in the portable Agent Plugins layout:
 
 - `plugin.json`: manifest with the listing fields under `extensions["com.openai"]` (interface, publication and `review.commerce: false`).
-- `mcp.json`: one server, `https://mcp.thebdk.com/mcp/preview` (Streamable HTTP). This preview-only endpoint must expose only preview tools, with no purchase, price or build tools and no commerce wording in its instructions or results. It is not the full `/mcp` endpoint the other hosts use.
+- `mcp.json`: one server, `https://mcp.thebdk.com/mcp/preview` (Streamable HTTP). This preview-only endpoint exposes two tools, `create_preview` and `list_previews`, with no purchase, price or build tools and no commerce wording in its instructions or results. It is not the full `/mcp` endpoint the other hosts use.
 - `skills/open-a-preview/SKILL.md`: a short skill that creates and lists previews and explains how to open them on a phone.
 - `assets/icon.png`: same file as `../assets/icon.png`.
 
@@ -22,19 +22,23 @@ node scripts/build-chatgpt-zip.mjs --out /some/dir   # checks, then writes bdk-n
 
 Run from the repository root. Without `--out` the ZIP goes to the system temp folder. Keep built ZIPs out of the repository.
 
-## Open before any upload
+## State on 17 November 2026
 
-1. **The `/mcp/preview` endpoint** must be live, with its own protected-resource metadata. Confirm its tool names match `tools_triggered` in the five positive test cases in `review-details.json` (written for `bdk_setup_preview`).
-2. **Developer identity.** `developerName` is set to the operator named on https://thebdk.com/terms. The directory shows the verified identity, which must match the terms and privacy pages. This is the founder's decision.
-3. **Reviewer account** with a password (no emailed codes), one sample preview, a pre-created preview for `https://docs.thebdk.com` (positive case 3) and well under the 20-preview cap. Credentials go in the dashboard's secure form, never in this package.
-4. **Demo video URL** (`demo_recording_url`): required for review, not set yet.
-5. **Test cases in the dashboard.** OpenAI's submission page says review details are optional in the ZIP and must be present before submitting. It does not say whether test cases can be typed into the dashboard without a ZIP. Check this in the dashboard before upload.
-6. **Domain verification** token at `/.well-known/openai-apps-challenge`, served as plain text.
-7. Test as a custom MCP server in ChatGPT before submitting.
+This list was "open before any upload" until the submission. What happened to each point:
 
-## Known review risks (recorded, not fixed here)
+1. **The `/mcp/preview` endpoint** is live with its own protected-resource metadata and exactly two tools, `create_preview` and `list_previews`. The test cases in `review-details.json` name those tools.
+2. **Developer identity.** OpenAI verified the operator named on https://thebdk.com/terms as a business.
+3. **Reviewer account.** A password-only test account with sample previews is used. Its sign-in details are only in OpenAI's review form, never in a package or in this repository.
+4. **Demo video.** Recorded and given to OpenAI with the submission.
+5. **Test cases.** The portal reads them from the uploaded ZIP and shows them read-only in its review form. This draft keeps them outside the ZIP, which is one reason it is not the submitted package.
+6. **Domain verification.** Done: the server answers OpenAI's check at `/.well-known/openai-apps-challenge` as plain text.
+7. **Connection test.** Run as a custom MCP server in ChatGPT, then connected in OpenAI's portal, which found both tools and reported no findings.
+
+Still open: OpenAI's review, and publishing after approval.
+
+## Known review risks
 
 - The full `/mcp` endpoint keeps its 11 tools in one server; reads and writes are not split into separate tools or servers.
-- The gateway does not check a token's audience (`resource`) or the request `Origin`.
-- `/mcp/preview` is a presentation layer, not a security boundary: a token obtained through it is also accepted on `/mcp` and on the checkout tool.
+- Fixed on 17 Nov 2026: a sign-in approved for `/mcp/preview` is limited to creating and listing previews. The limit is recorded for that user and client when the sign-in is approved, and the gateway checks it on every request: the same connection is refused on `/mcp`, on the other tools (checkout included) and on device approval. Until then `/mcp/preview` was a presentation layer only.
+- The gateway does not read a token's audience (`resource`) or the request `Origin`; the limit above is a recorded grant, not an audience check.
 - Fixed on 13 Nov 2026 (`2026-11-12-channels`): the full server's `instructions` no longer tell agents to load a remote guide as instructions (Directory Policy 2.F).

@@ -9,7 +9,9 @@ You still enrol in the Apple and Google developer programmes yourself, enter you
 - The BDK Native MCP server (11 tools) has been run end to end in **Claude Code**, in **Claude** on the web (claude.ai) and in **ChatGPT** (13 November 2026).
 - Installing this plugin from this repository has been tried in Claude Code. The install lines for the other hosts follow each host's own documentation and have not been tried.
 - Codex, Cursor, Gemini CLI and VS Code are untested.
-- The ChatGPT version in `chatgpt/` is **not submitted**.
+- BDK Native is published in Claude's connector directory: https://claude.ai/directory/bdk-native. That connector is separate from this plugin.
+- The Claude plugin (`plugins/bdk-native`, 1.0.5) was submitted to Anthropic's plugin directory on 13 November 2026. The outcome is not known yet.
+- BDK Native for ChatGPT and Codex (preview-only) was submitted to OpenAI on 17 November 2026 and is **in review, not published**. Its package is built from a source BDK keeps outside this repository; `chatgpt/` here is an earlier draft.
 
 ## What is in it
 
@@ -119,7 +121,7 @@ Use the server URL `https://mcp.thebdk.com/mcp` with Streamable HTTP and OAuth s
 | `.cursor-plugin/plugin.json`, `rules/bdk-native.mdc`, `mcp.json` | Cursor (skill from `plugins/bdk-native/`) |
 | `gemini-extension.json` | Gemini CLI (`contextFileName` points at the skill's `SKILL.md`) |
 | `assets/icon.png` | icon for Codex and Cursor |
-| `chatgpt/` | source of the ChatGPT plugin ZIP, preview-only, **not submitted** |
+| `chatgpt/` | earlier draft of the preview-only ChatGPT package and its build checks; not the package submitted to OpenAI |
 | `scripts/` | maintainer checks; no host loads them |
 
 ## For maintainers
@@ -132,7 +134,7 @@ Checks (Node 22, built-in modules only):
 node scripts/check-repo.mjs                  # JSON parses, manifests agree, no prices/secrets/codes
 node scripts/check-skill-sync.mjs            # skill stamp vs the live canonical skill_version
 node scripts/check-skill-sync.mjs ../bdk-native-web/apps/portal/public/agent/skill.md   # or a local copy
-node scripts/build-chatgpt-zip.mjs --check   # ChatGPT ZIP hard rules, writes nothing
+node scripts/build-chatgpt-zip.mjs --check   # hard rules for the ChatGPT draft in chatgpt/, writes nothing
 node --test scripts/test-checks.mjs          # tests for the two checks above
 claude plugin validate plugins/bdk-native --strict --profile directory   # the plugin the directory scans
 claude plugin validate . --strict                                        # the marketplace
@@ -149,7 +151,7 @@ Do this whenever the canonical guide's `skill_version` changes (`check-skill-syn
 4. Run every check above; all must pass.
 5. Commit, then tag with `claude plugin tag plugins/bdk-native` (it checks that the manifest and marketplace entry agree).
 
-The ChatGPT package in `chatgpt/` has its own version and review cycle; see `chatgpt/README.md`.
+The ChatGPT plugin has its own version and review cycle, and its submitted package is maintained outside this repository; `chatgpt/README.md` explains what the draft here is.
 
 ## Links
 

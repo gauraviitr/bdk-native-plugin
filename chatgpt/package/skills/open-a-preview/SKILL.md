@@ -11,8 +11,8 @@ BDK Native turns live web apps into iOS and Android apps. This plugin does one j
 
 1. Ask for the **published address** of the web app, the one visitors open. An editor link or a builder's share link will not work; if the user gives one, explain that and ask for the published address.
 2. Make sure the site belongs to the user.
-3. To see what exists, call `bdk_setup_preview` with `intent: "list"`.
-4. To create a preview, call `bdk_setup_preview` with `intent: "new"` and `app_link` set to the published address. If a preview for that address already exists, BDK returns it instead of making a copy. An account holds up to 20 previews; at that limit, the user deletes one at https://thebdk.com/native.
+3. To see what exists, call `list_previews`.
+4. To create a preview, call `create_preview` with `url` set to the published address (and `name` if the user chose one). If a preview for that address already exists, BDK returns it as it is instead of making a copy. An account holds up to 20 previews; at that limit, the user deletes one at https://thebdk.com/native.
 5. Tell the user how to open it:
    - Install BDK Preview from https://thebdk.com/apps#preview.
    - Sign in with the same BDK account.

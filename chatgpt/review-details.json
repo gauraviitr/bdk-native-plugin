@@ -4,31 +4,31 @@
       {
         "description": "Create a preview from a published web app address",
         "prompt": "Make a phone preview of my web app at https://demo.thebdk.com",
-        "tools_triggered": "bdk_setup_preview",
+        "tools_triggered": "create_preview",
         "expected_behavior": "A preview is created, or the existing preview for that address is returned. Its name and address are shown with steps to install BDK Preview and sign in with the same account. No sign-in code appears in chat."
       },
       {
         "description": "List the previews in the connected account",
         "prompt": "List my BDK phone previews.",
-        "tools_triggered": "bdk_setup_preview",
+        "tools_triggered": "list_previews",
         "expected_behavior": "The account's previews are listed with their names and published addresses only."
       },
       {
         "description": "The same address reuses the existing preview",
         "prompt": "Make a phone preview of https://docs.thebdk.com",
-        "tools_triggered": "bdk_setup_preview",
+        "tools_triggered": "create_preview",
         "expected_behavior": "The reviewer account already holds a preview for this address, so the plugin reports that it already exists and returns it. No duplicate preview is created."
       },
       {
         "description": "An editor link is refused",
         "prompt": "Make a phone preview of https://lovable.dev/projects/example-project",
-        "tools_triggered": "bdk_setup_preview",
+        "tools_triggered": "create_preview",
         "expected_behavior": "No preview is created. The plugin explains that it needs the published address of the app, not an editor link, and asks for it."
       },
       {
         "description": "Steps to open a preview on iPhone",
         "prompt": "How do I open my newest preview on my iPhone?",
-        "tools_triggered": "bdk_setup_preview",
+        "tools_triggered": "list_previews",
         "expected_behavior": "The plugin names the newest preview and gives the iPhone steps: install BDK Preview and sign in with the same BDK account; on iPhone it opens only the account owner's previews. No sign-in code appears in chat."
       }
     ],

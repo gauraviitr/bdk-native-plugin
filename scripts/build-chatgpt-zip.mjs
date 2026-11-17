@@ -12,7 +12,9 @@
 // Failure messages name the file, line and kind of problem only; they never
 // print the matched text, so a planted code or secret never reaches a log.
 //
-// NOT SUBMITTED. Building the ZIP does not upload or submit anything.
+// This builds the earlier draft in chatgpt/, not the package submitted to OpenAI
+// on 17 Nov 2026 (that one is maintained outside this repository). Building the
+// ZIP does not upload or submit anything.
 //
 // Usage:
 //   node scripts/build-chatgpt-zip.mjs              # check, then write the ZIP to the system temp folder
