@@ -1,5 +1,12 @@
 # Changelog
 
+## Records only (2026-11-17), no version change
+
+- README and `chatgpt/README.md` state the current state: the Claude connector is published, the Claude plugin is submitted to Anthropic's plugin directory, and BDK Native for ChatGPT and Codex was submitted to OpenAI on 17 Nov 2026 and is in review. `chatgpt/` is marked as an earlier draft, not the submitted package.
+- The draft in `chatgpt/` names the two tools the preview-only endpoint really has (`create_preview`, `list_previews`) instead of `bdk_setup_preview`.
+- `chatgpt/README.md` records that a sign-in approved for `/mcp/preview` is limited to creating and listing previews since 17 Nov 2026.
+- Nothing under `plugins/bdk-native/` changed; the plugin stays 1.0.5.
+
 ## 1.0.5 (2026-11-13)
 
 - Follows BDK's agent guide `skill_version` `2026-11-13-wording`. That guide version changed no tool, rule or guidance (only the one-line description on the MCP Registry and the server card), so the skill text is unchanged apart from its two version stamps.
